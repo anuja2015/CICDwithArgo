@@ -1,5 +1,5 @@
 # Use a base image with Java (JDK 17)
-FROM openjdk:17-jdk-slim
+FROM openjdk:17
 
 
 # Add the jar file created by Maven into the container
