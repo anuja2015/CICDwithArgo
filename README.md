@@ -1,5 +1,7 @@
 # Complete CICD with Jenkins,Maven,SonarQube,Docker,Kubernetes and ArgoCD
 
+## CI Setup
+
 ### 1. Create a virtual machine on Azure. I created a Ubuntu 22.04 VM of size Standard D4s v3 (4 vcpus, 16 GiB memory).
 
 ### 2. Install Docker on VM.
@@ -43,6 +45,29 @@
              newgrp docker
 
 ##### Verify that you can run docker commands without sudo.
+
+### 4. Set up Jenkins as docker container.
+
+##### Using the [Dockerfile](https://github.com/anuja2015/CICDwithArgo/blob/master/jenkins/Dockerfile) create a custom jenkins image.
+
+            docker build -t armdevu/custom-jenkins:1.0 .
+
+            docker run -p 8080:8080 -p 50000:50000 -d --name myjenkins -u root -v jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock armdevu/custom-jenkins:1.0
+
+#### Get Initial admin password
+
+            docker exec -it myjenkins /bin/bash
+            
+            jenkins@4b98fded05ff:/$ cat /var/jenkins_home/secrets/initialAdminPassword
+
+### 5. Setup a pipeline agent as docker container.
+
+##### Use the [Dockerfile](https://github.com/anuja2015/CICDwithArgo/blob/master/agent/Dockerfile) to create custom image for the pipeline agent. The image will have maven, docker and openjdk-17 installed.
+
+### 6. Create pipeline using [Jenkinsfile](https://github.com/anuja2015/CICDwithArgo/blob/master/sourcecode/Jenkinsfile)
+
+
+
 
 
 
