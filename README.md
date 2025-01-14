@@ -1,6 +1,6 @@
 # Complete CICD with Jenkins,Maven,SonarQube,Docker,Kubernetes and ArgoCD
 
-## CI Setup
+## __CI Setup__
 
 ### 1. Create a virtual machine on Azure. I created a Ubuntu 22.04 VM of size Standard D4s v3 (4 vcpus, 16 GiB memory).
 
@@ -164,6 +164,12 @@
 ### 8. Create pipeline using [Jenkinsfile](https://github.com/anuja2015/CICDwithArgo/blob/master/sourcecode/Jenkinsfile)
 
 ## Note: Make sure to add inbound rules in NSG for azure VM network to allow traffic on 3010(springboot app)  port.
+
+![Screenshot 2025-01-14 231154](https://github.com/user-attachments/assets/a3792491-d7a2-4dc4-8c34-41808626d59a)
+
+
+## __CD Setup__
+
 
 
 
