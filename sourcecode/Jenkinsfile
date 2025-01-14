@@ -6,7 +6,7 @@ pipeline {
         }
     }
     environment {
-        DOCKER_IMAGE = 'my-spring-boot-app'
+        DOCKER_IMAGE = 'sample-spring-boot-app'
         DOCKER_REGISTRY = 'https://index.docker.io/v1/'
         DOCKER_REPOSITORY = "armdevu/${DOCKER_IMAGE}"
     }
