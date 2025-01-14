@@ -60,11 +60,15 @@
             
             jenkins@4b98fded05ff:/$ cat /var/jenkins_home/secrets/initialAdminPassword
 
+## Note: Make sure to add inbound rules in NSG for azure VM network to allow traffic on 8080 port.
+
 ### 5. Setup a pipeline agent as docker container.
 
 ##### Use the [Dockerfile](https://github.com/anuja2015/CICDwithArgo/blob/master/agent/Dockerfile) to create custom image for the pipeline agent. The image will have maven, docker and openjdk-17 installed.
 
 ### 6. Create pipeline using [Jenkinsfile](https://github.com/anuja2015/CICDwithArgo/blob/master/sourcecode/Jenkinsfile)
+
+## Note: Make sure to add inbound rules in NSG for azure VM network to allow traffic on 3010(springboot app) and 9000 (sonarqube) port.
 
 
 
