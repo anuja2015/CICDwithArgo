@@ -5,6 +5,11 @@ pipeline {
         }
     }
     stages {
+        stage('Cleanup workspace') {
+            steps {
+                cleanWs()
+            }
+        }
         stage('Checkout Code') {
             steps {
                 echo 'Checking out code from the master branch...'
