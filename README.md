@@ -66,9 +66,104 @@
 
 ##### Use the [Dockerfile](https://github.com/anuja2015/CICDwithArgo/blob/master/agent/Dockerfile) to create custom image for the pipeline agent. The image will have maven, docker and openjdk-17 installed.
 
-### 6. Create pipeline using [Jenkinsfile](https://github.com/anuja2015/CICDwithArgo/blob/master/sourcecode/Jenkinsfile)
+### 6. Setup Sonarqube server.
 
-## Note: Make sure to add inbound rules in NSG for azure VM network to allow traffic on 3010(springboot app) and 9000 (sonarqube) port.
+#### 1. Install Sonar scanner plugin on jenkins.
+
+#### 2. Download and Install sonarqube server on the azure VM where jenkins is running.
+
+##### Add a used sonarqube
+
+            azureuser@JumpServer:~$ sudo su -
+            root@JumpServer:~# adduser sonarqube
+            Adding user `sonarqube' ...
+            Adding new group `sonarqube' (1001) ...
+            Adding new user `sonarqube' (1001) with group `sonarqube' ...
+            Creating home directory `/home/sonarqube' ...
+            Copying files from `/etc/skel' ...
+            New password:
+            Retype new password:
+            passwd: password updated successfully
+            Changing the user information for sonarqube
+            Enter the new value, or press ENTER for the default
+                    Full Name []:
+                    Room Number []:
+                    Work Phone []:
+                    Home Phone []:
+                    Other []:
+            Is the information correct? [Y/n] Y
+
+##### Install unzip
+            root@JumpServer:~# apt install unzip
+            Reading package lists... Done
+            Building dependency tree... Done
+            Reading state information... Done
+            Suggested packages:
+              zip
+            The following NEW packages will be installed:
+              unzip
+           
+            
+##### Download the sonarqube installation binaries
+
+            azureuser@JumpServer:~$ sudo su - sonarqube
+            sonarqube@JumpServer:~# wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-25.1.0.102122.zip
+            --2025-01-14 16:53:56--  https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-25.1.0.102122.zip
+            Resolving binaries.sonarsource.com (binaries.sonarsource.com)... 99.84.188.21, 99.84.188.35, 99.84.188.106, ...
+            Connecting to binaries.sonarsource.com (binaries.sonarsource.com)|99.84.188.21|:443... connected.
+            HTTP request sent, awaiting response... 200 OK
+            Length: 825789639 (788M) [binary/octet-stream]
+            Saving to: ‘sonarqube-25.1.0.102122.zip’
+
+            sonarqube-25.1.0.102122.zip                100%[========================================================================================>] 787.53M  73.9MB/s    in 10s
+
+            2025-01-14 16:54:06 (75.0 MB/s) - ‘sonarqube-25.1.0.102122.zip’ saved [825789639/825789639]
+
+
+##### Unzip the binaries.
+
+            sonarqube@JumpServer:~# unzip sonarqube-25.1.0.102122.zip
+            Archive:  sonarqube-25.1.0.102122.zip
+
+##### Change the permissions and ownership
+
+            sonarqube@JumpServer:~$ chmod -R 755 /home/sonarqube/sonarqube-25.1.0.102122
+            sonarqube@JumpServer:~$ chown -R sonarqube:sonarqube /home/sonarqube/sonarqube-25.1.0.102122
+
+##### Start sonarqube server depending on the os distribution
+
+            cd /home/sonarqube/sonarqube-25.1.0.102122/bin
+            
+            sonarqube@JumpServer:~/sonarqube-25.1.0.102122/bin$ cd linux-x86-64
+            
+            sonarqube@JumpServer:~/sonarqube-25.1.0.102122/bin/linux-x86-64$ ls -lrt
+            total 8
+            -rwxr-xr-x 1 sonarqube sonarqube 7195 Jan  7 10:30 sonar.sh
+            sonarqube@JumpServer:~/sonarqube-25.1.0.102122/bin/linux-x86-64$ ./sonar.sh start
+            /usr/bin/java
+            Starting SonarQube...
+            Started SonarQube.
+            
+##### Access sonarqube at <ipaddress-of-the-VM>:9000. Username: admin Initial password: admin.
+
+## Note: Make sure to add inbound rules in NSG for azure VM network to allow traffic on  9000 (sonarqube) port.
+
+![Screenshot 2025-01-14 225040](https://github.com/user-attachments/assets/e4fd78df-9e10-42e1-903e-bcfd8a7075e3)
+![Screenshot 2025-01-14 225307](https://github.com/user-attachments/assets/241faf27-2651-49cd-a765-c9da6af32bab)
+
+### 7. Add sonarqube credentials in jenkins
+
+#### Create token on sonarqube server for jenkins authentication
+
+![Screenshot 2025-01-14 225717](https://github.com/user-attachments/assets/a9ab7798-094b-4e15-8097-07c0331cfc40)
+
+#### Add the token to jenkins credentials
+
+![Screenshot 2025-01-14 225825](https://github.com/user-attachments/assets/a8d19bab-23a8-42cb-b20a-6df136f2ffef)
+
+### 8. Create pipeline using [Jenkinsfile](https://github.com/anuja2015/CICDwithArgo/blob/master/sourcecode/Jenkinsfile)
+
+## Note: Make sure to add inbound rules in NSG for azure VM network to allow traffic on 3010(springboot app)  port.
 
 
 
