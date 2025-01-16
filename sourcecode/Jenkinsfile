@@ -1,3 +1,4 @@
+
 pipeline {
     agent {
         docker {
@@ -44,7 +45,6 @@ pipeline {
         }
         stage('Build Docker Image') {
             
-            
             steps {
                 echo 'Building the Docker image...'
                 dir('sourcecode') {
@@ -76,6 +76,26 @@ pipeline {
 
                     // Push the image to Docker Hub
                     sh "docker push ${DOCKER_REPOSITORY}:${env.BUILD_ID}"
+                }
+            }
+        }
+        stage('Update Deployment File') {
+            environment {
+                GIT_REPO_NAME = "CICDwithArgo"
+                GIT_USER_NAME = "anuja2015"
+            }
+            steps {
+                withCredentials([string(credentialsId: 'github-cred', variable: 'GITHUB_TOKEN')]) {
+                    sh '''
+                        git config user.email "dec2024devops@outlook.com"
+                        git config user.name "dec2024devops"
+                        buildNumber=$BUILD_ID
+                ## sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
+                        sed -i "s|image:.*|image: ${DOCKER_REPOSITORY}:${buildNumber}|g" k8sManifests/deployment.yaml
+                        git add k8sManifests/deployment.yaml
+                        git commit -m "Update deployment image to version ${buildNumber}"
+                        git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+                    '''
                 }
             }
         }
