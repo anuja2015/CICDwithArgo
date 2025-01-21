@@ -4,7 +4,7 @@
   gather_facts: no
   vars:
     build_number: "{{ lookup('env', 'BUILD_NUMBER') }}"
-    yaml_file: "k8sManifests/deployment.yaml"
+    yaml_file: "../k8sManifests/deployment.yaml"
   
   tasks:
     - name: Read the deployment.yaml file
