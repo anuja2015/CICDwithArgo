@@ -10,8 +10,7 @@ ENV PATH=$MAVEN_HOME/bin:$PATH
 RUN  apt update && apt install -y python3  \
      && apt-get install -y python-software-properties \
      && apt-add-repository -y ppa:ansible/ansible \
-     && apt update &&  \
-     && apt install -y ansible
+     && apt update && apt install -y ansible
      
 
 # Install Docker CLI and Maven
