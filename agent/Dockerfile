@@ -8,8 +8,6 @@ ENV PATH=$MAVEN_HOME/bin:$PATH
 
 # Install Ansible
 RUN  apt update && apt upgrade -y && apt install -y python3  \
-     && apt-get install -y  software-properties-common \
-     && add-apt-repository --yes --remove ppa:ansible/ansible \
     && apt install -y ansible
      
 
