@@ -9,7 +9,7 @@ ENV PATH=$MAVEN_HOME/bin:$PATH
 # Install Ansible
 RUN  apt update && apt-get install -y software-properties-common \
      && apt-add-repository -y ppa:ansible/ansible \
-     && apt update && apt install -y ansible
+     && apt update && apt-get install -y ansible
      
 
 # Install Docker CLI and Maven
