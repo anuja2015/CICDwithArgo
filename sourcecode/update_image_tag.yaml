@@ -1,7 +1,6 @@
 ---
 - name: Update Image Tag in Kubernetes Deployment YAML
   hosts: localhost
-  connection: local
   gather_facts: no
   vars:
     build_number: "{{ lookup('env', 'BUILD_NUMBER') }}"
