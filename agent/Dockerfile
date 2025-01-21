@@ -6,7 +6,13 @@ ENV MAVEN_VERSION=3.8.8
 ENV MAVEN_HOME=/opt/maven
 ENV PATH=$MAVEN_HOME/bin:$PATH
 
-# Install Docker CLI
+# Install Ansible
+RUN  apt update && apt-get install -y software-properties-common \
+     && apt-add-repository -y ppa:ansible/ansible \
+     && apt update && apt install -y ansible
+     
+
+# Install Docker CLI and Maven
 RUN apt update && apt install -y \
     docker.io \
     curl \
@@ -20,7 +26,8 @@ RUN apt update && apt install -y \
 WORKDIR /app
 
 # Ensure Maven and Docker are available
-RUN mvn -version && docker --version
+RUN mvn -version && docker --version \
+    && ansible --version
 
 # Default command (can be overridden)
 CMD ["bash"]
