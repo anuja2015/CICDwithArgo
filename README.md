@@ -188,7 +188,7 @@
 
 ### 4. Configure ArgoCD
 
-##### Get services under the namespace argo-cd
+#### 1. Get services under the namespace argo-cd
 
             $ kubectl get service -n argo-cd           
             NAME                                      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE              argocd-applicationset-controller          ClusterIP   10.0.98.42     <none>        7000/TCP,8080/TCP            8m12s
@@ -200,17 +200,88 @@
             argocd-server                             ClusterIP   10.0.43.40     <none>        80/TCP,443/TCP               8m7s
             argocd-server-metrics                     ClusterIP   10.0.162.187   <none>        8083/TCP                     8m6s
 
-##### The service we require to access ArgoCD is argocd-server. To access this we have to change the service type to LoadBalancer(AKS) or NodePort(minikube).
+#### 2. Download ArgoCD CLI
+
+            brew install argocd
+            
+#### 3. The service we require to access ArgoCD is argocd-server. To access this we have to change the service type to LoadBalancer(AKS) or NodePort(minikube).
 
             $ kubectl edit service argocd-server -n argo-cd
             service/argocd-server edited
             $ kubectl get service -n argo-cd | grep argocd-server
-            argocd-server                             LoadBalancer   10.0.43.40     172.171.55.105   80:31322/TCP,443:30660/TCP   14m
-            argocd-server-metrics                     ClusterIP      10.0.162.187   <none>           8083/TCP                     14m
+           argocd-server                             LoadBalancer   10.0.167.250   74.179.255.111   80:32668/TCP,443:30783/TCP   27m
+            argocd-server-metrics                     ClusterIP      10.0.112.158   <none>           8083/TCP   
 
-#####
+##### Access the ArgoCD API using http://74.179.255.111:80 
+
+#### 4. Get the initial admin password 
+
+            argocd admin initial-password -n argocd
+
+#### Note: This is for first use only, Once logged in update the password.
+
+![Screenshot 2025-01-22 113429](https://github.com/user-attachments/assets/6a76c5fb-8684-4d47-ada2-fa2281e9fb05)
+![Screenshot 2025-01-22 113551](https://github.com/user-attachments/assets/2db6066f-7c5a-481a-8b1f-8d04bc706f6f)
+
+#### 5. Login to ArgoCD using CLI
+
+            $ argocd login 74.179.255.111
+            WARNING: server certificate had error: tls: failed to verify certificate: x509: cannot validate certificate for              74.179.255.111 because it doesn't contain any IP SANs. Proceed insecurely (y/n)? y
+            Username: admin
+            Password:
+            'admin:login' logged in successfully
+            Context '74.179.255.111' updated
+
+#### 6. Add the cluster to argocd
+
+            $ argocd cluster add argocd-k8s
+            WARNING: This will create a service account `argocd-manager` on the cluster referenced by context `argocd-k8s` with             full cluster level privileges. Do you want to continue [y/N]? y
+            INFO[0004] ServiceAccount "argocd-manager" already exists in namespace "kube-system"
+            INFO[0005] ClusterRole "argocd-manager-role" updated
+            INFO[0005] ClusterRoleBinding "argocd-manager-role-binding" updated
+            Cluster 'https://argocd-k8s-zv553ba0.hcp.eastus.azmk8s.io:443' added
+
+            $ argocd cluster list
+            SERVER                                                NAME        VERSION  STATUS      MESSAGE
+                       PROJECT
+            https://argocd-k8s-zv553ba0.hcp.eastus.azmk8s.io:443  argocd-k8s  1.30     Successful
 
 
+#### __Note__: Only after we add the cluster can we add the application.
+
+### 5. Add application to argocd.
+
+##### This can be done via UI or CLI.
+
+![Screenshot 2025-01-22 113725](https://github.com/user-attachments/assets/c6896d04-ab60-4b4e-93e0-b4d532424db0)
+
+![Screenshot 2025-01-22 120655](https://github.com/user-attachments/assets/f11c7f4a-b418-4926-9dfe-3dbae6ff506c)
+![Screenshot 2025-01-22 120816](https://github.com/user-attachments/assets/4c29bfe6-ac51-48fa-9476-2af1d7461636)
+
+![Screenshot 2025-01-22 120834](https://github.com/user-attachments/assets/85c721a7-7bb2-4936-b0e6-41cd59be643b)
+
+![Screenshot 2025-01-22 115546](https://github.com/user-attachments/assets/b16492a9-8874-46af-b4f0-3272d32ac512)
+![Screenshot 2025-01-22 115622](https://github.com/user-attachments/assets/8d0c5a05-be92-4a6d-b1fc-1013d2b0d769)
+
+##### Since we gave automatic sync, it gets synced.
+
+First time sync will create the application pods on the cluster.
+
+            $ kubectl get deploy
+            NAME              READY   UP-TO-DATE   AVAILABLE   AGE
+            myspringbootapp   2/2     2            2           14m
+           
+            $ kubectl get pods
+            NAME                               READY   STATUS    RESTARTS   AGE
+            myspringbootapp-5c989f95f7-f6fqf   1/1     Running   0          14m
+            myspringbootapp-5c989f95f7-frtpk   1/1     Running   0          14m
+
+### 6. Verify the CD
+
+##### The current image version is 
+
+            $ kubectl get deploy myspringbootapp -o jsonpath="{.spec.template.spec.containers[*].image}{'\n'}"
+            armdevu/sample-spring-boot-app:27
 
       
     
