@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: sample-sprintboot-app
-        image: armdevu/sample-spring-boot-app:8
+        image: armdevu/sample-spring-boot-app:9
         ports:
         - containerPort: 3010
       
