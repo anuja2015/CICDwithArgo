@@ -170,6 +170,18 @@
 
 ## __CD Setup__
 
+### Configure Webhook between Jenkins and Github.
+
+#### On jenkins
+![Screenshot 2025-01-22 130221](https://github.com/user-attachments/assets/94cd5851-fd3a-4eb0-ac70-02d7dc906610)
+
+#### On Github
+
+![Screenshot 2025-01-22 130328](https://github.com/user-attachments/assets/1b912bb8-ca47-49ca-9fc8-001549cc531d)
+![Screenshot 2025-01-22 130150](https://github.com/user-attachments/assets/97d02a10-df29-46ae-8091-edc9bd36c205)
+![Screenshot 2025-01-22 130137](https://github.com/user-attachments/assets/0507d86d-eef0-4ef4-af0a-af6b2c889e6c)
+![Screenshot 2025-01-22 130521](https://github.com/user-attachments/assets/0b3938e3-21b0-434a-80a9-f7c2bd6d07a8)
+
 ### 1. Create AKS cluster
 
 ##### I created AKS cluster using Terraform [Terraform files](https://github.com/anuja2015/devopsquestionare2024/tree/master/AKSTerraform)
