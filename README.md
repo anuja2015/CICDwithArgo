@@ -283,5 +283,20 @@ First time sync will create the application pods on the cluster.
             $ kubectl get deploy myspringbootapp -o jsonpath="{.spec.template.spec.containers[*].image}{'\n'}"
             armdevu/sample-spring-boot-app:27
 
+##### After a new jenkins build for source code, image version created is 4. and deployment.yaml gets updated.
+
+            $ kubectl get pods
+            NAME                               READY   STATUS    RESTARTS   AGE
+            myspringbootapp-7fc9d8b66d-bhghj   1/1     Running   0          37s
+            myspringbootapp-7fc9d8b66d-pxlch   1/1     Running   0          34s
+![Screenshot 2025-01-22 123533](https://github.com/user-attachments/assets/69e67aa5-9c0a-4e70-9273-7fc609444c3a)
+
+![Screenshot 2025-01-22 123739](https://github.com/user-attachments/assets/9ae4acf9-2dea-42a2-bb43-4eec293ff2b4)
+
+##### Now if the image version checked.
+
+            $ kubectl get deploy myspringbootapp -o jsonpath="{.spec.template.spec.containers[*].image}{'\n'}"
+            armdevu/sample-spring-boot-app:4
+
       
     
