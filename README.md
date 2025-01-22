@@ -170,9 +170,44 @@
 
 ## __CD Setup__
 
+### 1. Create AKS cluster
+
+##### I created AKS cluster using Terraform [Terraform files](https://github.com/anuja2015/devopsquestionare2024/tree/master/AKSTerraform)
+
+### 2. Configure kubeconfig
+
+            $ az aks get-credentials --name argocd-k8s --resource-group aks-resource-group
+            
+            Merged "argocd-k8s" as current context in /home/armdevu/.kube/config
+
+### 3. Install ArgoCD
+
+            ~$ kubectl create ns argo-cd
+            
+            namespace/argo-cd created
+
+            $ kubectl apply -n argo-cd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 
+### 4. Configure ArgoCD
 
+##### Get services under the namespace argo-cd
+
+            $ kubectl get service -n argo-cd
+            
+            NAME                                      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)                      AGE
+            
+            argocd-applicationset-controller          ClusterIP   10.0.98.42     <none>        7000/TCP,8080/TCP            8m12s
+
+            argocd-dex-server                         ClusterIP   10.0.118.7     <none>        5556/TCP,5557/TCP,5558/TCP   8m12s
+
+            argocd-metrics                            ClusterIP   10.0.40.252    <none>        8082/TCP                     8m11s
+
+            argocd-notifications-controller-metrics   ClusterIP   10.0.12.134    <none>        9001/TCP                     8m10s
+argocd-redis                              ClusterIP   10.0.216.140   <none>        6379/TCP                     8m9s
+argocd-repo-server                        ClusterIP   10.0.169.237   <none>        8081/TCP,8084/TCP            8m8s
+argocd-server                             ClusterIP   10.0.43.40     <none>        80/TCP,443/TCP               8m7s
+argocd-server-metrics                     ClusterIP   10.0.162.187   <none>        8083/TCP                     8m6s
 
 
 
